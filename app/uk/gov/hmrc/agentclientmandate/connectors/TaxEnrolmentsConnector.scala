@@ -30,10 +30,7 @@ import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.{Await, ExecutionContext, Future}
-import scala.util.Try
-import scala.concurrent.duration._
-
+import scala.concurrent.{ExecutionContext, Future}
 
 
 class DefaultTaxEnrolmentConnector @Inject()(val metrics: ServiceMetrics,
@@ -73,10 +70,9 @@ trait TaxEnrolmentConnector extends RawResponseReads with Auditable {
     }
   }
 
-  def deAllocateAgent(agentPartyId: String, clientId: String, agentCode: String)(implicit hc: HeaderCarrier): Future[HttpResponse] = {
+  def deAllocateAgent(groupId: List[String], clientId: String, agentCode: String)(implicit hc: HeaderCarrier): Future[HttpResponse] = {
     val enrolmentKey = s"${MandateConstants.AtedServiceContractName}~${MandateConstants.AtedIdentifier}~$clientId"
-    val agentGroupId = Try(Await.result(getGroupsWithEnrolment(agentPartyId), 120 seconds))
-    val deleteUrl = s"""$taxEnrolmentsUrl/groups/$agentGroupId/enrolments/$enrolmentKey?legacy-agentCode=$agentCode"""
+    val deleteUrl = s"""$taxEnrolmentsUrl/groups/$groupId/enrolments/$enrolmentKey?legacy-agentCode=$agentCode"""
     val timerContext = metrics.startTimer(MetricsEnum.TaxEnrolmentDeallocate)
 
     http.DELETE[HttpResponse](deleteUrl).map({ response =>
@@ -86,16 +82,16 @@ trait TaxEnrolmentConnector extends RawResponseReads with Auditable {
           metrics.incrementSuccessCounter(MetricsEnum.TaxEnrolmentDeallocate)
         case _ =>
           Logger.warn("deAllocateAgent failed")
-          Logger.warn(s"AgentParty = $agentPartyId, Enrol Key = $enrolmentKey, AgentGroupId = $agentGroupId, DeleteUrl = $deleteUrl, Status = ${response.status}")
+          Logger.warn(s"Enrol Key = $enrolmentKey, AgentGroupId = $groupId, DeleteUrl = $deleteUrl, Status = ${response.status}")
           metrics.incrementFailedCounter(MetricsEnum.TaxEnrolmentDeallocate)
-          doFailedAudit("deAllocateAgentFailed", s"$agentGroupId-$clientId", response.body)
+          doFailedAudit("deAllocateAgentFailed", s"$groupId-$clientId", response.body)
       }
       response
     })
   }
 
-  def getGroupsWithEnrolment(agentRefNumber: String)(implicit hc: HeaderCarrier): Future[List[String]] = {
-    val enrolmentKey = s"${MandateConstants.AgentServiceContractName}~${MandateConstants.AgentIdentifier}~$agentRefNumber"
+  def getGroupsWithEnrolment(agentPartyId: String, clientId: String, agentCode: String)(implicit hc: HeaderCarrier): Future[HttpResponse] = {
+    val enrolmentKey = s"${MandateConstants.AgentServiceContractName}~${MandateConstants.AgentIdentifier}~$agentPartyId"
     val getUrl = s"""$enrolmentStoreProxyURL/enrolment-store/enrolments/$enrolmentKey/groups"""
 
     http.GET[HttpResponse](s"$getUrl") map { response =>
@@ -105,9 +101,11 @@ trait TaxEnrolmentConnector extends RawResponseReads with Auditable {
           (response.json \ "principalGroupIds").as[List[String]]
         case _ =>
           Logger.error(s"[getGroupsWithEnrolments]: error retrieving group ID")
-          Logger.warn(s"AgentREf = $agentRefNumber, Enrl Key = $enrolmentKey, GetuRL = $getUrl, Status = ${response.status}")
+          Logger.warn(s"AgentREf = $agentPartyId, Enrl Key = $enrolmentKey, GetuRL = $getUrl, Status = ${response.status}")
           throw new RuntimeException("Error retrieving agent group ID")
       }
     }
+  } flatMap {
+    groupId => deAllocateAgent(groupId, clientId, agentCode)
   }
 }
