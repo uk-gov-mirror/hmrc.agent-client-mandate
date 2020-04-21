@@ -136,15 +136,17 @@ class TaxEnrolmentsConnectorSpec extends PlaySpec with MockitoSugar with BeforeA
         )
         when(mockWSHttp.GET[HttpResponse](any())(any(), any(), any()))
           .thenReturn(Future.successful(HttpResponse(OK, Some(successResponse))))
-        val response = await(connector.getGroupsWithEnrolment("agentRefNum"))
-        response must be (agentGroupID)
+        when(mockWSHttp.DELETE[HttpResponse](any(), any())(any(), any(), any())).
+          thenReturn(Future.successful(HttpResponse(NO_CONTENT, None)))
+        val response = await(connector.getGroupsWithEnrolment("agentRefNum", "clientId", "agentCode"))
+        response.status must be (204)
       }
 
       "return an exception when unable to return the agent groupID" in new Setup {
         intercept[RuntimeException] {
           when(mockWSHttp.GET[HttpResponse](any())(any(), any(), any()))
             .thenReturn(Future.successful(HttpResponse(INTERNAL_SERVER_ERROR, None)))
-          val result = await(connector.getGroupsWithEnrolment("agentRefNum"))
+          val result = await(connector.getGroupsWithEnrolment("agentRefNum", "clientId", "agentCode"))
           val response = the[RuntimeException] thrownBy result
           response.getMessage must include("Error retrieving agent group ID")
         }

@@ -70,7 +70,7 @@ trait TaxEnrolmentConnector extends RawResponseReads with Auditable {
     }
   }
 
-  def deAllocateAgent(groupId: List[String], clientId: String, agentCode: String)(implicit hc: HeaderCarrier): Future[HttpResponse] = {
+  def deAllocateAgent(groupId: String, clientId: String, agentCode: String)(implicit hc: HeaderCarrier): Future[HttpResponse] = {
     val enrolmentKey = s"${MandateConstants.AtedServiceContractName}~${MandateConstants.AtedIdentifier}~$clientId"
     val deleteUrl = s"""$taxEnrolmentsUrl/groups/$groupId/enrolments/$enrolmentKey?legacy-agentCode=$agentCode"""
     val timerContext = metrics.startTimer(MetricsEnum.TaxEnrolmentDeallocate)
@@ -106,6 +106,6 @@ trait TaxEnrolmentConnector extends RawResponseReads with Auditable {
       }
     }
   } flatMap {
-    groupId => deAllocateAgent(groupId, clientId, agentCode)
+    groupId => deAllocateAgent(groupId.head, clientId, agentCode)
   }
 }

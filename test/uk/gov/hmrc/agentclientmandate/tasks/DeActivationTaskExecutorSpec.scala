@@ -264,7 +264,7 @@ class DeActivationTaskExecutorSpec extends TestKit(ActorSystem("activation-task"
 
     "execute and move to 'finalize-deactivation' step tax enrolments" when {
       "signal is Next('gg-proxy-deactivation', args)" in {
-        when(taxEnrolmentMock.deAllocateAgent(any(), any(), any())(any())) thenReturn Future.successful(HttpResponse(NO_CONTENT))
+        when(taxEnrolmentMock.getGroupsWithEnrolment(any(), any(), any())(any())) thenReturn Future.successful(HttpResponse(NO_CONTENT))
 
         val actorRef = system.actorOf(DeActivationTaskExecutorMock.props(
         ))
