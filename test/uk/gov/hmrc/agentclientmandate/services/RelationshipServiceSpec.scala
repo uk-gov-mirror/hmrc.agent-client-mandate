@@ -41,7 +41,7 @@ class RelationshipServiceSpec extends PlaySpec with MockitoSugar with BeforeAndA
   val mockMetrics: ServiceMetrics = mock[ServiceMetrics]
   val agentCode = "ABC"
 
-  implicit val hc: HeaderCarrier = HeaderCarrier()
+  given hc: HeaderCarrier = HeaderCarrier()
   lazy val mockConfig: Config = ConfigFactory.load("identifiers.properties")
 
   val mockActivationTaskService: ActivationTaskService = mock[ActivationTaskService]

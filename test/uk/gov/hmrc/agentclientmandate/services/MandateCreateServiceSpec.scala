@@ -41,7 +41,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class MandateCreateServiceSpec extends PlaySpec with MockitoSugar with BeforeAndAfterEach {
 
-  implicit val hc: HeaderCarrier = HeaderCarrier()
+  given hc: HeaderCarrier = HeaderCarrier()
   val agentCode = "ac"
 
   val mandateRepositoryMock: MandateRepository = mock[MandateRepository]
@@ -92,7 +92,7 @@ class MandateCreateServiceSpec extends PlaySpec with MockitoSugar with BeforeAnd
       subscription = Subscription(Some("atedRefNum"), Service("ated", "ated")),
       clientDisplayName = "client display name")
 
-  implicit val testAuthRetrieval: AuthRetrieval = AuthRetrieval(
+  given testAuthRetrieval: AuthRetrieval = AuthRetrieval(
     enrolments = Set(
       Enrolment(
         key = "HMRC-AGENT-AGENT",

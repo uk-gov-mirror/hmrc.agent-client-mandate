@@ -39,15 +39,15 @@ class DefaultMandateUpdateService @Inject()(val etmpConnector: EtmpConnector,
                                             val auditConnector: AuditConnector,
                                             val mandateRepo: MandateRepo,
                                             val ec: ExecutionContext,
-                                            val servicesConfig: ServicesConfig,
-                                            override implicit val configuration: Configuration) extends MandateUpdateService {
+                                            val servicesConfig: ServicesConfig)(
+                                            using val configuration: Configuration) extends MandateUpdateService {
   val mandateRepository: MandateRepository = mandateRepo.repository
   override val expiryAfterDays: Int = servicesConfig.getInt("expiry-after-days")
 }
 
 trait MandateUpdateService extends Auditable {
-  implicit val ec: ExecutionContext
-  implicit val configuration: Configuration
+  given ec: ExecutionContext
+  given configuration: Configuration
 
   val expiryAfterDays: Int
 
@@ -126,7 +126,7 @@ trait MandateUpdateService extends Auditable {
         val updatedMandate = mandate.updateStatus(MandateStatus(Status.Expired, Instant.now, "SYSTEM"))
         mandateRepository.updateMandate(updatedMandate).map {
           case MandateUpdated(m) =>
-            implicit val hc: HeaderCarrier = HeaderCarrier()
+            given hc: HeaderCarrier = HeaderCarrier()
             doAudit("expire", "", m)
           case MandateUpdateError => logWarn("Could not expire mandate")
           case _ => throw new Exception("Unknown update status")

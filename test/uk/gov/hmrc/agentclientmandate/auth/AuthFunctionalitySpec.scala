@@ -36,9 +36,9 @@ import scala.concurrent.Future
 
 class AuthFunctionalitySpec extends AnyWordSpecLike with MockitoSugar {
 
-  lazy implicit val fakeRequest: FakeRequest[AnyContent] = FakeRequest()
+  given fakeRequest: FakeRequest[AnyContent] = FakeRequest()
   val mockAuthConnector: PlayAuthConnector = mock[PlayAuthConnector]
-  implicit lazy val hc: HeaderCarrier = HeaderCarrier()
+  given hc: HeaderCarrier = HeaderCarrier()
 
 
   protected abstract class Setup extends AuthFunctionality {

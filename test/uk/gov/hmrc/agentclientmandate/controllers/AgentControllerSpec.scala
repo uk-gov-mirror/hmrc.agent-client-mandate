@@ -35,6 +35,7 @@ import uk.gov.hmrc.agentclientmandate.models._
 import uk.gov.hmrc.agentclientmandate.repositories._
 import uk.gov.hmrc.agentclientmandate.services._
 import uk.gov.hmrc.agentclientmandate.utils.Generators._
+import uk.gov.hmrc.agentclientmandate.utils.Generators.given
 import uk.gov.hmrc.auth.core.retrieve.{AgentInformation, Credentials}
 import uk.gov.hmrc.auth.core.{Enrolment, EnrolmentIdentifier}
 import uk.gov.hmrc.http.HeaderCarrier
@@ -45,7 +46,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class AgentControllerSpec extends PlaySpec with MockitoSugar with BeforeAndAfterEach with ScalaCheckPropertyChecks {
 
-  implicit val hc: HeaderCarrier = HeaderCarrier()
+  given hc: HeaderCarrier = HeaderCarrier()
 
   val mandates = Seq("AAAAAAA", "BBBBBB", "CCCCCC")
 

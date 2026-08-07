@@ -35,7 +35,7 @@ class DefaultAgentDelegationForAtedController @Inject()(
                                                        ) extends BackendController(cc) with AgentDelegationForAtedController
 
 trait AgentDelegationForAtedController extends BackendController with AuthFunctionality {
-  implicit lazy val executionContext: ExecutionContext = defaultExecutionContext
+  given executionContext: ExecutionContext = defaultExecutionContext
   def agentDetailsService: AgentDetailsService
 
   def isAuthorisedForAted(@unused ac: AgentCode, ated: AtedUtr): Action[AnyContent] = Action.async { implicit request =>

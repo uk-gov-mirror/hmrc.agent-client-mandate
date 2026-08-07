@@ -43,7 +43,7 @@ class AgentController @Inject()(val createService: MandateCreateService,
                                 val authConnector: DefaultAuthConnector,
                                 val cc: ControllerComponents) extends BackendController(cc) with Auditable with AuthFunctionality {
 
-  implicit lazy val executionContext: ExecutionContext = defaultExecutionContext
+  given executionContext: ExecutionContext = defaultExecutionContext
 
   def create(agentCode: String): Action[JsValue] = Action.async(parse.json) { implicit request =>
     request.body.asOpt[CreateMandateDto] match {

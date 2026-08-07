@@ -40,7 +40,7 @@ class DefaultMandateCreateService @Inject()(val etmpConnector: EtmpConnector,
 }
 
 trait MandateCreateService extends Auditable {
-  implicit val ec: ExecutionContext
+  given ec: ExecutionContext
 
   val identifiers: Config
 

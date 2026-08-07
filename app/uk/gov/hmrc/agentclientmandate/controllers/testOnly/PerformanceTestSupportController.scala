@@ -33,7 +33,7 @@ class DefaultPerformanceTestSupportController @Inject()(
 }
 
 trait PerformanceTestSupportController extends BackendController {
-  implicit lazy val executionContext: ExecutionContext = defaultExecutionContext
+  given executionContext: ExecutionContext = defaultExecutionContext
 
   def mandateRepository: MandateRepository
 

@@ -32,8 +32,8 @@ import scala.util.{Failure, Success}
 
 class DefaultScheduledJobStarter @Inject()(val app: Application,
                                            val applicationLifecycle: ApplicationLifecycle,
-                                           val mandateUpdateService: MandateUpdateService,
-                                           implicit val ec : ExecutionContext) extends ScheduledJobStarter {
+                                           val mandateUpdateService: MandateUpdateService)(
+                                           using val ec: ExecutionContext) extends ScheduledJobStarter {
   override val scheduledJobs: Seq[ScheduledJob] = Seq(new ExclusiveScheduledJob {
     override def name: String = "ExpirationService"
 
@@ -68,7 +68,7 @@ class DefaultScheduledJobStarter @Inject()(val app: Application,
 }
 
 trait ScheduledJobStarter {
-  implicit val ec: ExecutionContext
+  given ec: ExecutionContext
 
   val scheduledJobs: Seq[ScheduledJob]
   val app: Application

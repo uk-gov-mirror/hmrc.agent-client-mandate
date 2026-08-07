@@ -71,7 +71,7 @@ class TaxEnrolmentsConnectorSpec extends PlaySpec with MockitoSugar with BeforeA
   }
 
   "TaxEnrolmentsConnector" must {
-    implicit val hc: HeaderCarrier = HeaderCarrier()
+    given hc: HeaderCarrier = HeaderCarrier()
 
     "create allocation" in new Setup {
       val enrolment: NewEnrolment = NewEnrolment(newEnrolment)

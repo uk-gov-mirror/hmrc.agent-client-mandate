@@ -53,8 +53,8 @@ val http: HttpClientV2) extends HipConnector {
 
 trait HipConnector extends Auditable with Logging {
 
-  implicit val ec: ExecutionContext
-  implicit val headerCarrier: HeaderCarrier = HeaderCarrier()
+  given ec: ExecutionContext
+  given headerCarrier: HeaderCarrier = HeaderCarrier()
 
   def hipPrefix: String
   def clientId: String

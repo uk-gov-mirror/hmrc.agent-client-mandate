@@ -35,7 +35,7 @@ trait IntegrationSpec
     with AssertionHelpers
     with LoginStub {
 
-  implicit val hc: HeaderCarrier = HeaderCarrier()
+  given hc: HeaderCarrier = HeaderCarrier()
   val BearerToken: String = "mock-bearer-token"
 
   lazy val mandateRepo: MandateRepo = app.injector.instanceOf[MandateRepo]

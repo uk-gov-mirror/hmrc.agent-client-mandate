@@ -42,7 +42,7 @@ class NotificationEmailServiceSpec extends PlaySpec with MockitoSugar with Befor
     val service = new TestNotificationEmailService
   }
 
-  implicit val hc: HeaderCarrier = HeaderCarrier()
+  given hc: HeaderCarrier = HeaderCarrier()
 
   val validResponse: JsValue = Json.parse("""{"valid":"true"}""")
   val invalidResponse: JsValue = Json.parse("""{"valid":"false"}""")

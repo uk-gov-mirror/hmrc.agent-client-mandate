@@ -50,7 +50,7 @@ object FeatureSwitch {
   def confPropertyName(name: String): String = s"feature.$name"
   def systemPropertyName(name: String): String = s"feature.$name"
 
-  implicit val formats: OFormat[FeatureSwitch] = Json.format[FeatureSwitch]
+  given formats: OFormat[FeatureSwitch] = Json.format[FeatureSwitch]
 }
 
 object ACMFeatureSwitches extends ACMFeatureSwitches

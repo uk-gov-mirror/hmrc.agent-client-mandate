@@ -41,13 +41,13 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class MandateUpdateServiceSpec extends PlaySpec with BeforeAndAfterEach with MockitoSugar {
 
-  implicit val hc: HeaderCarrier = HeaderCarrier()
+  given hc: HeaderCarrier = HeaderCarrier()
 
   val mockMandateRepository: MandateRepository = mock[MandateRepository]
   val mockEtmpConnector: EtmpConnector = mock[EtmpConnector]
   val mockHipConnector: HipConnector = mock[HipConnector]
   val mockAuditConnector: AuditConnector = mock[AuditConnector]
-  implicit val mockConfiguration: Configuration = mock[Configuration]
+  given mockConfiguration: Configuration = mock[Configuration]
 
   override def beforeEach(): Unit = {
     reset(mockMandateRepository)
@@ -77,7 +77,7 @@ class MandateUpdateServiceSpec extends PlaySpec with BeforeAndAfterEach with Moc
     val service = new TestMandateUpdateService
   }
 
-  implicit val testAuthRetrieval: AuthRetrieval = AuthRetrieval(
+  given testAuthRetrieval: AuthRetrieval = AuthRetrieval(
     enrolments = Set(
       Enrolment(
         key = "HMRC-AGENT-AGENT",

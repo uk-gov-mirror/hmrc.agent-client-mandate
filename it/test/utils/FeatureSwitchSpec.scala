@@ -34,7 +34,7 @@ class FeatureSwitchSpec extends PlaySpec with GuiceOneAppPerSuite {
 
   "Feature switch returns correct config values" when {
 
-    implicit lazy val config: Configuration = app.injector.instanceOf[Configuration]
+    given config: Configuration = app.injector.instanceOf[Configuration]
 
     "Return true for allocation" in {
       FeatureSwitch.isEnabled("allocation.usingGG") must be (true)

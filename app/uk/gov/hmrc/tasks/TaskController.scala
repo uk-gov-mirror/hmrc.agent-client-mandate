@@ -51,7 +51,7 @@ trait TaskControllerT {
   }
 
   protected def startClock(intervalSecs: Int): Unit = {
-    implicit val ec: ExecutionContextExecutor = system.dispatcher
+    given ec: ExecutionContextExecutor = system.dispatcher
     cancellable =
       system.scheduler.scheduleWithFixedDelay(0 seconds, intervalSecs seconds)(new RunnableTask)
   }

@@ -52,13 +52,13 @@ class ActivationTaskService @Inject()(val etmpConnector: EtmpConnector,
                                       val emailNotificationService: NotificationEmailService,
                                       val auditConnector: AuditConnector,
                                       val fetchService: MandateFetchService,
-                                      val mandateRepo: MandateRepo,
-                                      implicit val configuration: Configuration)(implicit ec: ExecutionContext) extends Auditable with ScheduledService {
+                                      val mandateRepo: MandateRepo)(
+                                       using val configuration: Configuration, ec: ExecutionContext) extends Auditable with ScheduledService {
 
   val mandateRepository: MandateRepository = mandateRepo.repository
 
   def execute(signal: Signal): Try[Signal] = {
-    implicit val hc: HeaderCarrier = createHeaderCarrier(signal)
+    given hc: HeaderCarrier = createHeaderCarrier(signal)
 
     signal match {
       case Start(args) => start(args)
@@ -123,7 +123,7 @@ class ActivationTaskService @Inject()(val etmpConnector: EtmpConnector,
             else (m.clientParty.map(_.contactDetails.email).getOrElse(""), Some("client"), mandate.clientParty.fold("")(_.name))
             val service = m.subscription.service.id
             Try(emailNotificationService.sendMail(emailString = receiverParty._1, models.Status.Active,
-              userType = Some("agent"), recipient = receiverParty._2,service = service, recipientName = receiverParty._3, prevStatus = previousStatus)) match {
+              userType = Some("agent"), recipient = receiverParty._2, service = service, recipientName = receiverParty._3, prevStatus = previousStatus)) match {
               case Success(_) =>
                 doAudit("emailSent", args("agentCode"), m)
               case Failure(reason) =>

@@ -44,7 +44,7 @@ class DefaultEmailConnector @Inject()(val auditConnector: AuditConnector,
 }
 
 trait EmailConnector extends Auditable {
-  implicit val ec: ExecutionContext
+  given ec: ExecutionContext
 
   def sendEmailUri: String
   def serviceUrl: String

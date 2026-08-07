@@ -52,15 +52,15 @@ class DeActivationTaskService @Inject()(val etmpConnector: EtmpConnector,
                                         val emailNotificationService: NotificationEmailService,
                                         val auditConnector: AuditConnector,
                                         val fetchService: MandateFetchService,
-                                        val mandateRepo: MandateRepo,
-                                        implicit val configuration: Configuration)(implicit ec: ExecutionContext) extends ScheduledService with Auditable {
+                                        val mandateRepo: MandateRepo)(
+                                         using val configuration: Configuration, ec: ExecutionContext) extends ScheduledService with Auditable {
 
   val mandateRepository: MandateRepository = mandateRepo.repository
 
   override def execute(signal: Signal): Try[Signal] = {
     val auth: String = signal.args.getOrElse("authorization", "dummy auth")
 
-    implicit val hc: HeaderCarrier = HeaderCarrier(authorization = Some(Authorization(auth)))
+    given hc: HeaderCarrier = HeaderCarrier(authorization = Some(Authorization(auth)))
 
     signal match {
       case Start(args) => start(args)

@@ -36,7 +36,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 class
 HipMandateControllerISpec extends IntegrationSpec {
 
-  implicit val config: Configuration = app.injector.instanceOf[Configuration]
+  given config: Configuration = app.injector.instanceOf[Configuration]
 
   override def beforeAll(): Unit = {
     super.beforeAll()

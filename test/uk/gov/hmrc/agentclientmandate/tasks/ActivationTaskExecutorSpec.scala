@@ -76,7 +76,7 @@ class ActivationTaskExecutorSpec extends TestKit(ActorSystem("activation-task"))
   val mockServiceMetrics: ServiceMetrics = mock[ServiceMetrics]
   val mockAuditConnector: AuditConnector = mock[AuditConnector]
   val mockMandateRepo: MandateRepo = mock[MandateRepo]
-  implicit val mockConfiguration: Configuration = mock[Configuration]
+  given mockConfiguration: Configuration = mock[Configuration]
 
   val timeToUse: Instant = Instant.now()
   val mandate: Mandate = Mandate(mandateReferenceGen.sample.get,
@@ -140,11 +140,10 @@ class ActivationTaskExecutorSpec extends TestKit(ActorSystem("activation-task"))
     mockEmailNotificationService,
     mockAuditConnector,
     mockMandateFetchService,
-    mockMandateRepo,
-    mockConfiguration
-  )
+    mockMandateRepo
+  )(using mockConfiguration)
 
-  implicit val hc: HeaderCarrier = HeaderCarrier()
+  given hc: HeaderCarrier = HeaderCarrier()
 
   "ActivationTaskExecutor" should {
     lazy val message = ActivationTaskMessage(activationTaskService, MockMetricsCache.mockMetrics)

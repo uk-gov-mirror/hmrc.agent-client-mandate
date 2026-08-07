@@ -90,7 +90,7 @@ class DeActivationTaskExecutorSpec extends TestKit(ActorSystem("activation-task"
   val mockMandateUpdateService: MandateUpdateService = mock[MandateUpdateService]
   val mockAuditConnector: AuditConnector = mock[AuditConnector]
   val mockMandateRepo: MandateRepo = mock[MandateRepo]
-  implicit val mockConfiguration: Configuration = mock[Configuration]
+  given mockConfiguration: Configuration = mock[Configuration]
 
   val timeToUse: Instant = Instant.now()
   val mandate: Mandate = Mandate(mandateReferenceGen.sample.get,
@@ -141,7 +141,7 @@ class DeActivationTaskExecutorSpec extends TestKit(ActorSystem("activation-task"
     def props(): Props = Props(classOf[DeactivationTaskExecutor])
   }
 
-  implicit val hc: HeaderCarrier = HeaderCarrier()
+  given hc: HeaderCarrier = HeaderCarrier()
 
   lazy val deActivationTaskService: DeActivationTaskService = new DeActivationTaskService(
     etmpMock,
@@ -152,9 +152,8 @@ class DeActivationTaskExecutorSpec extends TestKit(ActorSystem("activation-task"
     mockEmailNotificationService,
     mockAuditConnector,
     mockMandateFetchService,
-    mockMandateRepo,
-    mockConfiguration
-  )
+    mockMandateRepo
+  )(using mockConfiguration)
 
   "DeActivationTaskExecutor" should {
     lazy val message = DeActivationTaskMessage(deActivationTaskService, MockMetricsCache.mockMetrics)

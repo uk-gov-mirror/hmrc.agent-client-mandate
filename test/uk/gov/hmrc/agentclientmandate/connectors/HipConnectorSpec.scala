@@ -39,7 +39,7 @@ class HipConnectorSpec extends PlaySpec with MockitoSugar with BeforeAndAfterEac
 
   val mockMetrics: ServiceMetrics = mock[ServiceMetrics]
   val mockAuditConnector: AuditConnector = mock[AuditConnector]
-  implicit val configuration: Configuration = mock[Configuration]
+  given configuration: Configuration = mock[Configuration]
 
   override def beforeEach(): Unit = {
     reset(mockMetrics)
@@ -57,8 +57,7 @@ class HipConnectorSpec extends PlaySpec with MockitoSugar with BeforeAndAfterEac
   trait Setup extends ConnectorTest {
 
     class TestHipConnector extends HipConnector {
-      override implicit val ec: ExecutionContext = ExecutionContext.global
-      override implicit val headerCarrier: HeaderCarrier = HeaderCarrier()
+      override val ec: ExecutionContext = ExecutionContext.global
 
       override val transmittingSystem: String = "HIP"
       override val clientId: String = ""

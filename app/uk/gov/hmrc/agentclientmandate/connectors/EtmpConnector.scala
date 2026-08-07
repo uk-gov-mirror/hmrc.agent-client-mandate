@@ -44,8 +44,8 @@ val http: HttpClientV2) extends EtmpConnector {
 
 trait EtmpConnector extends Auditable {
 
-  implicit val ec: ExecutionContext
-  implicit val headerCarrier: HeaderCarrier = HeaderCarrier()
+  given ec: ExecutionContext
+  given headerCarrier: HeaderCarrier = HeaderCarrier()
 
   val etmpUrl: String
 

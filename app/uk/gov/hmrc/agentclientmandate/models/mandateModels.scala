@@ -25,7 +25,7 @@ import uk.gov.hmrc.agentclientmandate.models.Status.Status
 case class ContactDetails(email: String, phone: Option[String] = None)
 
 object ContactDetails {
-  implicit val formats: OFormat[ContactDetails] = Json.format[ContactDetails]
+  given formats: OFormat[ContactDetails] = Json.format[ContactDetails]
 }
 
 object PartyType extends Enumeration {
@@ -34,7 +34,7 @@ object PartyType extends Enumeration {
   val Individual: models.PartyType.Value = Value
   val Organisation: models.PartyType.Value = Value
 
-  implicit val enumFormat: Format[PartyType] = new Format[PartyType] {
+  given enumFormat: Format[PartyType] = new Format[PartyType] {
     def reads(json: JsValue): JsSuccess[models.PartyType.Value] = JsSuccess(PartyType.withName(json.as[String]))
 
     def writes(`enum`: PartyType): JsString = JsString(`enum`.toString)
@@ -44,7 +44,7 @@ object PartyType extends Enumeration {
 case class Party(id: String, name: String, `type`: PartyType, contactDetails: ContactDetails)
 
 object Party {
-  implicit val formats: OFormat[Party] = Json.format[Party]
+  given formats: OFormat[Party] = Json.format[Party]
 }
 
 object Status extends Enumeration {
@@ -59,7 +59,7 @@ object Status extends Enumeration {
   val PendingActivation: models.Status.Value = Value
   val Cancelled: models.Status.Value = Value
 
-  implicit val enumFormat: Format[Status] = new Format[Status] {
+  given enumFormat: Format[Status] = new Format[Status] {
     def reads(json: JsValue): JsSuccess[models.Status.Value] = JsSuccess(Status.withName(json.as[String]))
 
     def writes(`enum`: Status): JsString = JsString(`enum`.toString)
@@ -94,25 +94,25 @@ object MandateStatus {
     }
   }
 
-  implicit val formats: Format[MandateStatus] = Format(reads, statusWrites)
+  given formats: Format[MandateStatus] = Format(reads, statusWrites)
 }
 
 case class Service(id: String, name: String)
 
 object Service {
-  implicit val formats: OFormat[Service] = Json.format[Service]
+  given formats: OFormat[Service] = Json.format[Service]
 }
 
 case class Subscription(referenceNumber: Option[String] = None, service: Service)
 
 object Subscription {
-  implicit val formats: OFormat[Subscription] = Json.format[Subscription]
+  given formats: OFormat[Subscription] = Json.format[Subscription]
 }
 
 case class User(credId: String, name: String, groupId: Option[String] = None)
 
 object User {
-  implicit val formats: OFormat[User] = Json.format[User]
+  given formats: OFormat[User] = Json.format[User]
 }
 
 case class Mandate(id: String,
@@ -132,17 +132,17 @@ case class Mandate(id: String,
 }
 
 object Mandate {
-  implicit val formats: OFormat[Mandate] = Json.format[Mandate]
+  given formats: OFormat[Mandate] = Json.format[Mandate]
 }
 
 case class OldMandateReference(mandateId: String, atedRefNumber: String)
 
 object OldMandateReference {
-  implicit val formats: OFormat[OldMandateReference] = Json.format[OldMandateReference]
+  given formats: OFormat[OldMandateReference] = Json.format[OldMandateReference]
 }
 
 case class UserGroupIDs(principalGroupIds: List[String] = List(), delegatedGroupIds: List[String] = List())
 
 object UserGroupIDs {
-  implicit val formats: OFormat[UserGroupIDs] = Json.format[UserGroupIDs]
+  given formats: OFormat[UserGroupIDs] = Json.format[UserGroupIDs]
 }

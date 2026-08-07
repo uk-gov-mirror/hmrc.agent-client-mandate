@@ -37,7 +37,7 @@ class MandateFetchServiceSpec extends PlaySpec with MockitoSugar with BeforeAndA
 
   val mandateId = "123"
   val mockMandateRepository: MandateRepository = mock[MandateRepository]
-  implicit val hc: HeaderCarrier = HeaderCarrier()
+  given hc: HeaderCarrier = HeaderCarrier()
 
   trait Setup {
 
@@ -53,7 +53,7 @@ class MandateFetchServiceSpec extends PlaySpec with MockitoSugar with BeforeAndA
     reset(mockMandateRepository)
   }
 
-  implicit val testAuthRetrieval: AuthRetrieval = AuthRetrieval(
+  given testAuthRetrieval: AuthRetrieval = AuthRetrieval(
     enrolments = Set(),
     agentInformation = AgentInformation(None, None, None),
     credentials = Option(Credentials(providerId = "cred-id-113244018119", providerType = "GovernmentGateway"))

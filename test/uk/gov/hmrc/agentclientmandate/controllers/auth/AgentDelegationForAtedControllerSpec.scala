@@ -41,7 +41,7 @@ class AgentDelegationForAtedControllerSpec extends PlaySpec with MockitoSugar wi
 
   val agentCode: AgentCode = AgentCode("XYZ")
   val atedUtr: AtedUtr = new Generator().nextAtedUtr
-  implicit val hc: HeaderCarrier = HeaderCarrier()
+  given hc: HeaderCarrier = HeaderCarrier()
 
   val mockRelationshipService: AgentDetailsService = mock[AgentDetailsService]
   val mockAuthConnector: DefaultAuthConnector = mock[DefaultAuthConnector]

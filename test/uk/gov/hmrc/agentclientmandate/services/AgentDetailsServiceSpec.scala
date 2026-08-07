@@ -38,10 +38,10 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class AgentDetailsServiceSpec extends PlaySpec with MockitoSugar with BeforeAndAfterEach {
 
-  implicit val hc: HeaderCarrier = HeaderCarrier()
-  implicit val ec: ExecutionContext = scala.concurrent.ExecutionContext.Implicits.global
+  given hc: HeaderCarrier = HeaderCarrier()
+  given ec: ExecutionContext = scala.concurrent.ExecutionContext.Implicits.global
 
-  implicit val testAuthRetrieval: AuthRetrieval = AuthRetrieval(
+  given testAuthRetrieval: AuthRetrieval = AuthRetrieval(
     enrolments = Set(Enrolment(
       key = "HMRC-AGENT-AGENT",
       identifiers = Seq(EnrolmentIdentifier(key = "AgentRefNumber", value = agentBusinessUtrGen.sample.get)),

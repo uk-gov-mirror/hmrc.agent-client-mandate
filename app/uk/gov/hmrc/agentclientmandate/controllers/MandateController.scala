@@ -47,7 +47,7 @@ class MandateController @Inject()(val createService: MandateCreateService,
                                   val cc: ControllerComponents) extends BackendController(cc) with Auditable with AuthFunctionality {
 
 
-  implicit lazy val executionContext: ExecutionContext = defaultExecutionContext
+  given executionContext: ExecutionContext = defaultExecutionContext
 
   def fetch(mandateId: String): Action[AnyContent] = Action.async { _ =>
     fetchService.fetchClientMandate(mandateId).map {

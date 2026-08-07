@@ -47,7 +47,7 @@ class DefaultTaxEnrolmentConnector @Inject()(val metrics: ServiceMetrics,
 
 trait TaxEnrolmentConnector extends Auditable {
 
-  implicit val ec: ExecutionContext
+  given ec: ExecutionContext
 
   def serviceUrl: String
   def enrolmentStoreProxyURL: String

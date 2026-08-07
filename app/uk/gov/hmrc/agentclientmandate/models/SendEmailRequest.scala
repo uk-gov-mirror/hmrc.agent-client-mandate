@@ -22,5 +22,5 @@ import play.api.libs.json.*
 case class SendEmailRequest(to: List[String], templateId: String, parameters: Map[String, String], force: Boolean)
 
 object SendEmailRequest {
-  implicit val format: OFormat[SendEmailRequest] = Json.format[SendEmailRequest]
+  given format: OFormat[SendEmailRequest] = Json.format[SendEmailRequest]
 }
