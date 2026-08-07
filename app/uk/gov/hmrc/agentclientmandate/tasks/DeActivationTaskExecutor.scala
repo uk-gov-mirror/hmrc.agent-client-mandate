@@ -20,26 +20,26 @@ import play.api.Configuration
 
 import javax.inject.Inject
 import java.time.Instant
-import play.api.http.Status._
+import play.api.http.Status.*
 import uk.gov.hmrc.agentclientmandate.connectors.{EtmpConnector, HipConnector, TaxEnrolmentConnector}
 import uk.gov.hmrc.agentclientmandate.metrics.{MetricsEnum, ServiceMetrics}
 import uk.gov.hmrc.agentclientmandate.models.Status.Status
-import uk.gov.hmrc.agentclientmandate.models._
-import uk.gov.hmrc.agentclientmandate.repositories._
+import uk.gov.hmrc.agentclientmandate.models.*
+import uk.gov.hmrc.agentclientmandate.repositories.*
 import uk.gov.hmrc.agentclientmandate.services.{MandateFetchService, MandateUpdateService, NotificationEmailService}
 import uk.gov.hmrc.agentclientmandate.utils.ACMFeatureSwitches
 import uk.gov.hmrc.agentclientmandate.utils.LoggerUtil.{logError, logWarn}
-import uk.gov.hmrc.agentclientmandate.utils.MandateUtils._
+import uk.gov.hmrc.agentclientmandate.utils.MandateUtils.*
 import uk.gov.hmrc.agentclientmandate.{Auditable, models}
 import uk.gov.hmrc.http.Authorization
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.connector.AuditConnector
-import uk.gov.hmrc.tasks._
+import uk.gov.hmrc.tasks.*
 import utils.ScheduledService
 
 import scala.language.postfixOps
 import scala.concurrent.{Await, ExecutionContext}
-import scala.concurrent.duration._
+import scala.concurrent.duration.*
 import scala.util.{Failure, Success, Try}
 
 class DeactivationTaskExecutor extends TaskExecutor

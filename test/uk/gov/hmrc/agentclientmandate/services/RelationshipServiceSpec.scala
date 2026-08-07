@@ -20,8 +20,8 @@ import com.typesafe.config.{Config, ConfigFactory}
 import org.mockito.Mockito.reset
 
 import java.time.Instant
-import org.scalatest._
-import org.scalatest.matchers.should.Matchers._
+import org.scalatest.*
+import org.scalatest.matchers.should.Matchers.*
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.{JsValue, Json}

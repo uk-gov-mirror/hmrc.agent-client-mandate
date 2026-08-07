@@ -19,7 +19,7 @@ package uk.gov.hmrc.agentclientmandate.services
 import javax.inject.Inject
 import uk.gov.hmrc.agentclientmandate.connectors.{EmailConnector, EmailStatus}
 import uk.gov.hmrc.agentclientmandate.models.Status.Status
-import uk.gov.hmrc.agentclientmandate.models._
+import uk.gov.hmrc.agentclientmandate.models.*
 import uk.gov.hmrc.agentclientmandate.utils.LoggerUtil.logError
 import uk.gov.hmrc.http.HeaderCarrier
 

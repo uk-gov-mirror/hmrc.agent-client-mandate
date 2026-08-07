@@ -18,7 +18,7 @@ package uk.gov.hmrc.tasks
 
 import org.apache.pekko.actor.ActorSystem
 import org.apache.pekko.testkit.{DefaultTimeout, ImplicitSender, TestActorRef, TestKit}
-import org.mockito.ArgumentMatchers._
+import org.mockito.ArgumentMatchers.*
 import org.mockito.Mockito.when
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.matchers.should.Matchers.*

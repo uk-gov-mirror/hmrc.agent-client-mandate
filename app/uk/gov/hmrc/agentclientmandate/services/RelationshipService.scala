@@ -19,16 +19,16 @@ package uk.gov.hmrc.agentclientmandate.services
 import com.typesafe.config.{Config, ConfigFactory}
 import javax.inject.Inject
 import uk.gov.hmrc.agentclientmandate.metrics.ServiceMetrics
-import uk.gov.hmrc.agentclientmandate.models._
+import uk.gov.hmrc.agentclientmandate.models.*
 import uk.gov.hmrc.agentclientmandate.tasks.{ActivationTaskExecutor, ActivationTaskService, DeActivationTaskService, DeactivationTaskExecutor}
 import uk.gov.hmrc.agentclientmandate.utils.LoggerUtil.logWarn
-import uk.gov.hmrc.agentclientmandate.utils.MandateConstants._
+import uk.gov.hmrc.agentclientmandate.utils.MandateConstants.*
 import uk.gov.hmrc.agentclientmandate.utils.MandateUtils
 import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals.{credentials, groupIdentifier}
 import uk.gov.hmrc.auth.core.retrieve.{Credentials, ~}
 import uk.gov.hmrc.auth.core.{AuthorisedFunctions, PlayAuthConnector}
 import uk.gov.hmrc.http.{BadRequestException, HeaderCarrier}
-import uk.gov.hmrc.tasks._
+import uk.gov.hmrc.tasks.*
 
 import scala.concurrent.{ExecutionContext, Future}
 

@@ -19,13 +19,13 @@ package uk.gov.hmrc.agentclientmandate.controllers
 import javax.inject.Inject
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, ControllerComponents, Result}
-import uk.gov.hmrc.agentclientmandate._
-import uk.gov.hmrc.agentclientmandate.auth._
+import uk.gov.hmrc.agentclientmandate.*
+import uk.gov.hmrc.agentclientmandate.auth.*
 import uk.gov.hmrc.agentclientmandate.connectors.{DefaultTaxEnrolmentConnector, UsersGroupSearchConnector}
 import uk.gov.hmrc.agentclientmandate.models.Mandate
-import uk.gov.hmrc.agentclientmandate.models.Status._
-import uk.gov.hmrc.agentclientmandate.repositories._
-import uk.gov.hmrc.agentclientmandate.services._
+import uk.gov.hmrc.agentclientmandate.models.Status.*
+import uk.gov.hmrc.agentclientmandate.repositories.*
+import uk.gov.hmrc.agentclientmandate.services.*
 import uk.gov.hmrc.agentclientmandate.utils.LoggerUtil.{logError, logWarn}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.connector.AuditConnector

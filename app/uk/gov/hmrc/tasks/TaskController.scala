@@ -21,7 +21,7 @@ import scala.language.postfixOps
 
 import scala.collection.mutable
 import scala.concurrent.ExecutionContextExecutor
-import scala.concurrent.duration._
+import scala.concurrent.duration.*
 
 trait TaskControllerT {
 

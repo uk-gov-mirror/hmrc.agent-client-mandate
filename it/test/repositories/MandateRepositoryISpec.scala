@@ -19,13 +19,13 @@ package repositories
 import helpers.IntegrationSpec
 import java.time.{LocalDateTime, ZoneOffset, Instant}
 import org.scalatest.Assertion
-import org.mongodb.scala._
-import org.mongodb.scala.model.Filters._
+import org.mongodb.scala.*
+import org.mongodb.scala.model.Filters.*
 import uk.gov.hmrc.agentclientmandate.models
 import uk.gov.hmrc.agentclientmandate.models.Status
-import uk.gov.hmrc.agentclientmandate.models.Status._
-import uk.gov.hmrc.agentclientmandate.models._
-import uk.gov.hmrc.agentclientmandate.repositories._
+import uk.gov.hmrc.agentclientmandate.models.Status.*
+import uk.gov.hmrc.agentclientmandate.models.*
+import uk.gov.hmrc.agentclientmandate.repositories.*
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 

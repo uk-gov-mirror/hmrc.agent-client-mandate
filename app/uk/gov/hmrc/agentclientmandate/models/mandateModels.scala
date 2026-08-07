@@ -17,7 +17,7 @@
 package uk.gov.hmrc.agentclientmandate.models
 
 import java.time.Instant
-import play.api.libs.json._
+import play.api.libs.json.*
 import uk.gov.hmrc.agentclientmandate.models
 import uk.gov.hmrc.agentclientmandate.models.PartyType.PartyType
 import uk.gov.hmrc.agentclientmandate.models.Status.Status

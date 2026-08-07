@@ -20,7 +20,7 @@ import java.time.LocalDate
 import javax.inject.Inject
 import uk.gov.hmrc.agentclientmandate.auth.AuthRetrieval
 import uk.gov.hmrc.agentclientmandate.connectors.EtmpConnector
-import uk.gov.hmrc.agentclientmandate.models._
+import uk.gov.hmrc.agentclientmandate.models.*
 import uk.gov.hmrc.domain.AtedUtr
 
 import scala.concurrent.{ExecutionContext, Future}

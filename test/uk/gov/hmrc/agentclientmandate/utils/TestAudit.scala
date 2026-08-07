@@ -19,7 +19,7 @@ package uk.gov.hmrc.agentclientmandate.utils
 import java.util.concurrent.ConcurrentLinkedQueue
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.connector.AuditConnector
-import uk.gov.hmrc.play.audit.model.Audit._
+import uk.gov.hmrc.play.audit.model.Audit.*
 import uk.gov.hmrc.play.audit.model.{Audit, AuditAsMagnet, DataEvent}
 
 import scala.concurrent.ExecutionContext
