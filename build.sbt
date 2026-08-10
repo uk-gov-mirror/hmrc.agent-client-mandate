@@ -22,7 +22,10 @@ lazy val microservice = Project(appName, file("."))
   .settings(CodeCoverageSettings.settings *)
   .settings(playSettings *)
   .settings(defaultSettings *)
-  .settings(RoutesKeys.routesImport ++= Seq("uk.gov.hmrc.agentclientmandate.binders.DelegationPathBinders._"))
+  .settings(RoutesKeys.routesImport ++= Seq(
+    "uk.gov.hmrc.agentclientmandate.binders.DelegationPathBinders._",
+    "uk.gov.hmrc.agentclientmandate.binders.DelegationPathBinders.given"
+  ))
   .settings(
     libraryDependencies ++= appDependencies,
     retrieveManaged := true,
