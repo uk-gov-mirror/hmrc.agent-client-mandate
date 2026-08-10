@@ -42,7 +42,7 @@ object FeatureSwitch {
 
   def disable(switch: FeatureSwitch)(using config: Configuration): FeatureSwitch = setProp(switch.name, value = false)
 
-  def setProp(name: String, value: Boolean)(implicit config: Configuration): FeatureSwitch = {
+  def setProp(name: String, value: Boolean)(using config: Configuration): FeatureSwitch = {
     sys.props.+= ((systemPropertyName(name), value.toString))
     forName(name)
   }
@@ -57,9 +57,9 @@ object ACMFeatureSwitches extends ACMFeatureSwitches
 
 trait ACMFeatureSwitches {
 
-  def hipSwitch()(implicit config: Configuration): FeatureSwitch = FeatureSwitch.forName("hipSwitch")
+  def hipSwitch()(using config: Configuration): FeatureSwitch = FeatureSwitch.forName("hipSwitch")
 
-  def apply(name: String)(implicit config: Configuration): Option[FeatureSwitch] = name match {
+  def apply(name: String)(using config: Configuration): Option[FeatureSwitch] = name match {
     case "hipSwitch" => Some(hipSwitch())
     case _ => None
   }

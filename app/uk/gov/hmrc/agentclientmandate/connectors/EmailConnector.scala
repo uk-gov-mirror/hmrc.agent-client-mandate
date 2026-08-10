@@ -51,7 +51,7 @@ trait EmailConnector extends Auditable {
   def http: HttpClientV2
 
   def sendTemplatedEmail(emailString: String, templateName: String, serviceString: String,
-                         uniqueAuthNo: Option[String], recipientName: String)(implicit hc: HeaderCarrier): Future[EmailStatus] = {
+                         uniqueAuthNo: Option[String], recipientName: String)(using hc: HeaderCarrier): Future[EmailStatus] = {
 
     val defaultParams = Map("emailAddress" -> emailString, "service" -> serviceString, "recipient" -> recipientName)
 

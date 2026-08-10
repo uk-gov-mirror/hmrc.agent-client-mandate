@@ -145,7 +145,7 @@ class MandateMongoRepository @Inject() (mongo: MongoComponent, val metrics: Serv
 
   }
 
-  def fetchMandate(mandateId: String)(implicit ec: ExecutionContext): Future[MandateFetchStatus] = {
+  def fetchMandate(mandateId: String)(using ec: ExecutionContext): Future[MandateFetchStatus] = {
     val timerContext = metrics.startTimer(MetricsEnum.RepositoryFetchMandate)
     Mdc.preservingMdc {
       collection
@@ -162,7 +162,7 @@ class MandateMongoRepository @Inject() (mongo: MongoComponent, val metrics: Serv
     }
   }
 
-  def fetchMandateByClient(clientId: String, service: String)(implicit ec: ExecutionContext): Future[MandateFetchStatus] = {
+  def fetchMandateByClient(clientId: String, service: String)(using ec: ExecutionContext): Future[MandateFetchStatus] = {
     val query = and(
       equal("clientParty.id", clientId),
       equal("subscription.service.id", service.toUpperCase),
@@ -195,7 +195,7 @@ class MandateMongoRepository @Inject() (mongo: MongoComponent, val metrics: Serv
                                   credId: Option[String],
                                   otherCredId: Option[String],
                                   displayName: Option[String])
-                                 (implicit ec: ExecutionContext): Future[Seq[Mandate]] = {
+                                 (using ec: ExecutionContext): Future[Seq[Mandate]] = {
     val query = if (credId.isDefined && otherCredId.isDefined) {
       and(
         equal("agentParty.id", arn),
@@ -232,7 +232,7 @@ class MandateMongoRepository @Inject() (mongo: MongoComponent, val metrics: Serv
     result
   }
 
-  def findMandatesMissingAgentEmail(arn: String, service: String)(implicit ec: ExecutionContext): Future[Seq[String]] = {
+  def findMandatesMissingAgentEmail(arn: String, service: String)(using ec: ExecutionContext): Future[Seq[String]] = {
     val timerContext = metrics.startTimer(MetricsEnum.RepositoryFindAgentEmail)
     val query = and(
       equal("agentParty.contactDetails.email", ""),
@@ -272,7 +272,7 @@ class MandateMongoRepository @Inject() (mongo: MongoComponent, val metrics: Serv
     }
   }
 
-  def updateAgentEmail(mandateIds: Seq[String], email: String)(implicit ec: ExecutionContext): Future[MandateUpdate] = {
+  def updateAgentEmail(mandateIds: Seq[String], email: String)(using ec: ExecutionContext): Future[MandateUpdate] = {
     val query = in("id", mandateIds:_*)
     val modifier = set("agentParty.contactDetails.email", email)
     val timerContext = metrics.startTimer(MetricsEnum.RepositoryUpdateAgentEmail)
@@ -294,7 +294,7 @@ class MandateMongoRepository @Inject() (mongo: MongoComponent, val metrics: Serv
     }
   }
 
-  def updateClientEmail(mandateId: String, email: String)(implicit ec: ExecutionContext): Future[MandateUpdate] = {
+  def updateClientEmail(mandateId: String, email: String)(using ec: ExecutionContext): Future[MandateUpdate] = {
     val query = equal("id", mandateId)
     val modifier = set("clientParty.contactDetails.email", email)
     val timerContext = metrics.startTimer(MetricsEnum.RepositoryUpdateClientEmail)
@@ -317,7 +317,7 @@ class MandateMongoRepository @Inject() (mongo: MongoComponent, val metrics: Serv
     }
   }
 
-  def updateAgentCredId(oldCredId: String, newCredId: String)(implicit ec: ExecutionContext): Future[MandateUpdate] = {
+  def updateAgentCredId(oldCredId: String, newCredId: String)(using ec: ExecutionContext): Future[MandateUpdate] = {
     val query = equal("createdBy.credId", oldCredId)
     val modifier = set("createdBy.credId", newCredId)
     val timerContext = metrics.startTimer(MetricsEnum.RepositoryUpdateAgentCredId)
@@ -340,7 +340,7 @@ class MandateMongoRepository @Inject() (mongo: MongoComponent, val metrics: Serv
     }
   }
 
-  def findOldMandates(dateFrom: Instant)(implicit ec: ExecutionContext): Future[Seq[Mandate]] = {
+  def findOldMandates(dateFrom: Instant)(using ec: ExecutionContext): Future[Seq[Mandate]] = {
     val query = and(
       lt("currentStatus.timestamp", dateFrom.toEpochMilli()),
       or(equal("currentStatus.status", Status.New.toString),
@@ -367,7 +367,7 @@ class MandateMongoRepository @Inject() (mongo: MongoComponent, val metrics: Serv
     result
   }
 
-  def getClientCancelledMandates(dateFrom: Instant, arn: String, serviceName: String)(implicit ec: ExecutionContext): Future[Seq[String]] = {
+  def getClientCancelledMandates(dateFrom: Instant, arn: String, serviceName: String)(using ec: ExecutionContext): Future[Seq[String]] = {
     val query = and(
       equal("agentParty.id", arn),
       equal("subscription.service.name", serviceName.toLowerCase),
@@ -403,7 +403,7 @@ class MandateMongoRepository @Inject() (mongo: MongoComponent, val metrics: Serv
 
   // $COVERAGE-OFF$
 
-  def removeMandate(mandateId: String)(implicit ec: ExecutionContext): Future[MandateRemove] = {
+  def removeMandate(mandateId: String)(using ec: ExecutionContext): Future[MandateRemove] = {
     val query = equal("id", mandateId)
     Mdc.preservingMdc {
       collection

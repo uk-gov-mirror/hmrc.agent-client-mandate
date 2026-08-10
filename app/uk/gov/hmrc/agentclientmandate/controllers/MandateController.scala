@@ -98,7 +98,7 @@ class MandateController @Inject()(val createService: MandateCreateService,
     }
   }
 
-  private def breakRelationship(agentCode: String, mandate: Mandate)(implicit ar: AuthRetrieval, hc: HeaderCarrier): Future[Result] = {
+  private def breakRelationship(agentCode: String, mandate: Mandate)(using ar: AuthRetrieval, hc: HeaderCarrier): Future[Result] = {
     updateService.updateMandate(mandate, Some(PendingCancellation)).flatMap {
       case MandateUpdated(x) =>
         relationshipService.breakAgentClientRelationship(x, agentCode, ar.userType)
@@ -111,7 +111,7 @@ class MandateController @Inject()(val createService: MandateCreateService,
     }
   }
 
-  private def cancelMandate(status: models.Status.Value, mandate: Mandate)(implicit ar: AuthRetrieval, hc: HeaderCarrier): Future[Result] = {
+  private def cancelMandate(status: models.Status.Value, mandate: Mandate)(using ar: AuthRetrieval, hc: HeaderCarrier): Future[Result] = {
     updateService.updateMandate(mandate, Some(Cancelled)).flatMap {
       case MandateUpdated(x) =>
         val service = x.subscription.service.id
