@@ -31,7 +31,7 @@ trait NotificationEmailService {
   def emailConnector: EmailConnector
 
   def sendMail(emailString: String, action: Status, userType: Option[String], recipient: Option[String], recipientName: String,
-               service: String, prevStatus: Option[Status], uniqueAuthNo: Option[String] = None)(implicit hc: HeaderCarrier): Future[EmailStatus] = {
+               service: String, prevStatus: Option[Status], uniqueAuthNo: Option[String] = None)(using hc: HeaderCarrier): Future[EmailStatus] = {
 
     def template: String = {
       (action, userType, prevStatus, recipient) match {

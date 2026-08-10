@@ -30,7 +30,7 @@ trait Auditable {
 
   private def audit: Audit = new Audit("agent-client-mandate", auditConnector)
 
-  def doAudit(auditType: String, ac: String, m: Mandate)(implicit hc:HeaderCarrier, ec: ExecutionContext): Unit = {
+  def doAudit(auditType: String, ac: String, m: Mandate)(using hc:HeaderCarrier, ec: ExecutionContext): Unit = {
 
     val auditDetails = Map("serviceName" -> m.subscription.service.name,
       "mandateId" -> m.id,
@@ -48,7 +48,7 @@ trait Auditable {
     sendDataEvent(auditType, auditDetails ++ clientAuditDetails)
   }
 
-  def doResponseAudit(auditType: String, resp: HttpResponse)(implicit hc:HeaderCarrier, ec: ExecutionContext): Unit = {
+  def doResponseAudit(auditType: String, resp: HttpResponse)(using hc:HeaderCarrier, ec: ExecutionContext): Unit = {
     val auditDetails = Map("serviceName" -> "ated",
       "response.status" -> s"${resp.status}",
       "response.body" -> s"${resp.body}")
@@ -56,7 +56,7 @@ trait Auditable {
     sendDataEvent(auditType, auditDetails)
   }
 
-  def doFailedAudit(auditType: String, request: String, response: String)(implicit hc:HeaderCarrier, ec: ExecutionContext): Unit = {
+  def doFailedAudit(auditType: String, request: String, response: String)(using hc:HeaderCarrier, ec: ExecutionContext): Unit = {
     val auditDetails = Map("request" -> request,
                            "response" -> response)
 
@@ -64,7 +64,7 @@ trait Auditable {
   }
 
   private def sendDataEvent(auditType: String, detail: Map[String, String])
-                   (implicit hc: HeaderCarrier, ec: ExecutionContext): Unit =
+                   (using hc: HeaderCarrier, ec: ExecutionContext): Unit =
     audit.sendDataEvent(DataEvent("agent-client-mandate", auditType,
       tags = hc.toAuditTags("", "N/A"),
       detail = hc.toAuditDetails(detail.toSeq: _*)))

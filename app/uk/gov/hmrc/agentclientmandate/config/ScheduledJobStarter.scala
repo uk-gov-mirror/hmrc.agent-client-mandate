@@ -37,7 +37,7 @@ class DefaultScheduledJobStarter @Inject()(val app: Application,
   override val scheduledJobs: Seq[ScheduledJob] = Seq(new ExclusiveScheduledJob {
     override def name: String = "ExpirationService"
 
-    override def executeInMutex(implicit ec: ExecutionContext): Future[Result] = {
+    override def executeInMutex(using ec: ExecutionContext): Future[Result] = {
       mandateUpdateService.checkStaleDocuments()
       Future.successful(Result("[executeInMutex] Checking expiry of stale documents"))
     }

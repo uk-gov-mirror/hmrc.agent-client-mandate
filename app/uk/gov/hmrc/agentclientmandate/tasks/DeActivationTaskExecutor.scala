@@ -87,7 +87,7 @@ class DeActivationTaskService @Inject()(val etmpConnector: EtmpConnector,
     }
   }
 
-  private def unenrolTaxEnrolments(args: Map[String, String])(implicit hc: HeaderCarrier): Try[Signal] = {
+  private def unenrolTaxEnrolments(args: Map[String, String])(using hc: HeaderCarrier): Try[Signal] = {
     Try(Await.result(taxEnrolmentConnector.deAllocateAgent(args("agentPartyId"), args("clientId"), args("agentCode"), args("userType")), 120 seconds)) match {
       case Success(resp) =>
         resp.status match {
@@ -109,7 +109,7 @@ class DeActivationTaskService @Inject()(val etmpConnector: EtmpConnector,
     }
   }
 
-  private def finalize(args: Map[String, String])(implicit hc: HeaderCarrier): Try[Signal] = {
+  private def finalize(args: Map[String, String])(using hc: HeaderCarrier): Try[Signal] = {
     val fetchResult = Await.result(fetchService.fetchClientMandate(args("mandateId")), 5 seconds)
     fetchResult match {
       case MandateFetched(mandate) =>
@@ -145,7 +145,7 @@ class DeActivationTaskService @Inject()(val etmpConnector: EtmpConnector,
   }
 
   private def handleRemoveMandateEmailRequest(email: String, recipient: Option[String], recipientName: String, args: Map[String, String],
-                                              mandate: Mandate, userType: Option[String], prevStatus: Option[Status])(implicit hc: HeaderCarrier): Unit = {
+                                              mandate: Mandate, userType: Option[String], prevStatus: Option[Status])(using hc: HeaderCarrier): Unit = {
 
     val service = mandate.subscription.service.id
     val uniqueAuthNo: Option[String] = if (recipient.contains("client")) Some(mandate.id) else None

@@ -30,7 +30,7 @@ class FeatureSwitchSpec extends PlaySpec with GuiceOneAppPerSuite {
       "feature.deallocation.usingGG" -> "false"
     )
   ).build()
-  implicit override lazy val app: Application = fakeApplication()
+  override lazy val app: Application = fakeApplication()
 
   "Feature switch returns correct config values" when {
 

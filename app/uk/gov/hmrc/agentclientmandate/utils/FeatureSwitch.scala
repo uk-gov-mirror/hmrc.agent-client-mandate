@@ -24,11 +24,11 @@ import scala.util.Try
 case class FeatureSwitch(name: String, enabled: Boolean)
 
 object FeatureSwitch {
-  def forName(name: String)(implicit config: Configuration): FeatureSwitch = {
+  def forName(name: String)(using config: Configuration): FeatureSwitch = {
     FeatureSwitch(name, isEnabled(name))
   }
 
-  def isEnabled(name: String)(implicit config: Configuration): Boolean = {
+  def isEnabled(name: String)(using config: Configuration): Boolean = {
     val sysPropValue = sys.props.get(systemPropertyName(name))
     sysPropValue match {
       case Some(x)  => x.toBoolean
@@ -36,11 +36,11 @@ object FeatureSwitch {
     }
   }
 
-  def enable(switch: FeatureSwitch)(implicit config: Configuration): FeatureSwitch = {
+  def enable(switch: FeatureSwitch)(using config: Configuration): FeatureSwitch = {
     setProp(switch.name, value = true)
   }
 
-  def disable(switch: FeatureSwitch)(implicit config: Configuration): FeatureSwitch = setProp(switch.name, value = false)
+  def disable(switch: FeatureSwitch)(using config: Configuration): FeatureSwitch = setProp(switch.name, value = false)
 
   def setProp(name: String, value: Boolean)(implicit config: Configuration): FeatureSwitch = {
     sys.props.+= ((systemPropertyName(name), value.toString))

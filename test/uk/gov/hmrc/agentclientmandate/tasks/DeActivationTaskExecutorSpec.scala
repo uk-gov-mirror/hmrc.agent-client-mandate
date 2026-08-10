@@ -160,11 +160,11 @@ class DeActivationTaskExecutorSpec extends TestKit(ActorSystem("activation-task"
 
     "execute and FINISH" when {
       "signal is Next('finalize-deactivation', args) and userType is Client" in {
-        when(mockMandateFetchService.fetchClientMandate(any())(any())).thenReturn(Future.successful(MandateFetched(mandate)))
-        when(mockMandateRepository.updateMandate(any())(any()))
+        when(mockMandateFetchService.fetchClientMandate(any())(using any())).thenReturn(Future.successful(MandateFetched(mandate)))
+        when(mockMandateRepository.updateMandate(any())(using any()))
           .thenReturn(Future.successful(MandateUpdated(updatedMandate1)))
         when(mockEmailNotificationService.sendMail(ArgumentMatchers.eq("client@mail.com"), any(),
-          ArgumentMatchers.eq(Some("client")), any(), any(), any(), any(), any())(any()))
+          ArgumentMatchers.eq(Some("client")), any(), any(), any(), any(), any())(using any()))
           .thenReturn(Future.successful(EmailSent))
 
         val actorRef = system.actorOf(DeActivationTaskExecutorMock.props(
@@ -182,10 +182,10 @@ class DeActivationTaskExecutorSpec extends TestKit(ActorSystem("activation-task"
       }
 
       "signal is Next('finalize-deactivation', args) and userType is Agent, send mail to agent" in {
-        when(mockMandateFetchService.fetchClientMandate(any())(any())).thenReturn(Future.successful(MandateFetched(mandate)))
-        when(mockMandateRepository.updateMandate(any())(any())).thenReturn(Future.successful(MandateUpdated(updatedMandate)))
+        when(mockMandateFetchService.fetchClientMandate(any())(using any())).thenReturn(Future.successful(MandateFetched(mandate)))
+        when(mockMandateRepository.updateMandate(any())(using any())).thenReturn(Future.successful(MandateUpdated(updatedMandate)))
         when(mockEmailNotificationService.sendMail(ArgumentMatchers.eq("agent@mail.com"), any(),
-          ArgumentMatchers.eq(Some("agent")), any(), any(), any(), any(), any())(any()))
+          ArgumentMatchers.eq(Some("agent")), any(), any(), any(), any(), any())(using any()))
           .thenReturn(Future.successful(EmailSent))
 
         val actorRef = system.actorOf(DeActivationTaskExecutorMock.props(
@@ -202,10 +202,10 @@ class DeActivationTaskExecutorSpec extends TestKit(ActorSystem("activation-task"
       }
 
       "signal is Next('finalize-deactivation', args) and userType is Agent, sends mail to client" in {
-        when(mockMandateFetchService.fetchClientMandate(any())(any())).thenReturn(Future.successful(MandateFetched(mandate)))
-        when(mockMandateRepository.updateMandate(any())(any())).thenReturn(Future.successful(MandateUpdated(updatedMandate1)))
+        when(mockMandateFetchService.fetchClientMandate(any())(using any())).thenReturn(Future.successful(MandateFetched(mandate)))
+        when(mockMandateRepository.updateMandate(any())(using any())).thenReturn(Future.successful(MandateUpdated(updatedMandate1)))
         when(mockEmailNotificationService.sendMail(ArgumentMatchers.eq("client@mail.com"), any(),
-          ArgumentMatchers.eq(Some("client")), any(),any(), any(), any(), any())(any()))
+          ArgumentMatchers.eq(Some("client")), any(),any(), any(), any(), any())(using any()))
           .thenReturn(Future.successful(EmailSent))
 
         val actorRef = system.actorOf(DeActivationTaskExecutorMock.props(
@@ -235,10 +235,10 @@ class DeActivationTaskExecutorSpec extends TestKit(ActorSystem("activation-task"
       }
 
       "signal is Next('finalize-deactivation', args) but no mandate is returned" in {
-        when(mockMandateFetchService.fetchClientMandate(any())(any())).thenReturn(Future.successful(MandateNotFound))
-        when(mockMandateRepository.updateMandate(any())(any())).thenReturn(Future.successful(MandateUpdated(updatedMandate)))
+        when(mockMandateFetchService.fetchClientMandate(any())(using any())).thenReturn(Future.successful(MandateNotFound))
+        when(mockMandateRepository.updateMandate(any())(using any())).thenReturn(Future.successful(MandateUpdated(updatedMandate)))
         when(mockEmailNotificationService.sendMail(ArgumentMatchers.eq(updatedMandate.id),
-          any(), any(),any(), any(), any(), any(), any())(any())).thenReturn(Future.successful(EmailSent))
+          any(), any(),any(), any(), any(), any(), any())(using any())).thenReturn(Future.successful(EmailSent))
 
         val actorRef = system.actorOf(DeActivationTaskExecutorMock.props(
         ))
@@ -248,9 +248,9 @@ class DeActivationTaskExecutorSpec extends TestKit(ActorSystem("activation-task"
       }
 
       "signal is Next('finalize-deactivation', args) but mandate update fails" in {
-        when(mockMandateFetchService.fetchClientMandate(any())(any())).thenReturn(Future.successful(MandateFetched(mandate)))
-        when(mockMandateRepository.updateMandate(any())(any())).thenReturn(Future.successful(MandateUpdateError))
-        when(mockEmailNotificationService.sendMail(ArgumentMatchers.eq(updatedMandate.id), any(), any(), any(), any(), any(), any(), any())(any()))
+        when(mockMandateFetchService.fetchClientMandate(any())(using any())).thenReturn(Future.successful(MandateFetched(mandate)))
+        when(mockMandateRepository.updateMandate(any())(using any())).thenReturn(Future.successful(MandateUpdateError))
+        when(mockEmailNotificationService.sendMail(ArgumentMatchers.eq(updatedMandate.id), any(), any(), any(), any(), any(), any(), any())(using any()))
           .thenReturn(Future.successful(EmailSent))
 
         val actorRef = system.actorOf(DeActivationTaskExecutorMock.props(
@@ -264,8 +264,8 @@ class DeActivationTaskExecutorSpec extends TestKit(ActorSystem("activation-task"
     "rollback" when {
 
       "the Signal is START and move to Finish" in {
-        when(mockMandateFetchService.fetchClientMandate(any())(any())).thenReturn(Future.successful(MandateFetched(mandate)))
-        when(mockMandateRepository.updateMandate(any())(any())).thenReturn(Future.successful(MandateUpdated(updatedMandate)))
+        when(mockMandateFetchService.fetchClientMandate(any())(using any())).thenReturn(Future.successful(MandateFetched(mandate)))
+        when(mockMandateRepository.updateMandate(any())(using any())).thenReturn(Future.successful(MandateUpdated(updatedMandate)))
 
         val actorRef = system.actorOf(DeActivationTaskExecutorMock.props(
         ))
@@ -344,7 +344,7 @@ class DeActivationTaskExecutorSpec extends TestKit(ActorSystem("activation-task"
 
     "execute and move to 'finalize-deactivation' step tax enrolments" when {
       "signal is Next('gg-proxy-deactivation', args)" in {
-        when(taxEnrolmentMock.deAllocateAgent(any(), any(), any(), any())(any())) thenReturn Future.successful(HttpResponse(NO_CONTENT, ""))
+        when(taxEnrolmentMock.deAllocateAgent(any(), any(), any(), any())(using any())) thenReturn Future.successful(HttpResponse(NO_CONTENT, ""))
 
         val actorRef = system.actorOf(DeActivationTaskExecutorMock.props(
         ))
@@ -363,7 +363,7 @@ class DeActivationTaskExecutorSpec extends TestKit(ActorSystem("activation-task"
       }
 
       "signal is Next('gg-proxy-deactivation', args) not found returned" in {
-        when(taxEnrolmentMock.deAllocateAgent(any(), any(), any(), any())(any())) thenReturn Future.successful(HttpResponse(NOT_FOUND, ""))
+        when(taxEnrolmentMock.deAllocateAgent(any(), any(), any(), any())(using any())) thenReturn Future.successful(HttpResponse(NOT_FOUND, ""))
 
         val actorRef = system.actorOf(DeActivationTaskExecutorMock.props())
 
@@ -381,7 +381,7 @@ class DeActivationTaskExecutorSpec extends TestKit(ActorSystem("activation-task"
       }
 
       "signal is Next('gg-proxy-deactivation', args) failure code returned" in {
-        when(taxEnrolmentMock.deAllocateAgent(any(), any(), any(), any())(any())) thenReturn Future.successful(HttpResponse(INTERNAL_SERVER_ERROR, ""))
+        when(taxEnrolmentMock.deAllocateAgent(any(), any(), any(), any())(using any())) thenReturn Future.successful(HttpResponse(INTERNAL_SERVER_ERROR, ""))
 
         val actorRef = system.actorOf(DeActivationTaskExecutorMock.props(
         ))
@@ -399,11 +399,11 @@ class DeActivationTaskExecutorSpec extends TestKit(ActorSystem("activation-task"
     "execute and FINISH" when {
       "signal is Next('finalize-deactivation', args) and userType is Client" in {
         FeatureSwitch.enable(FeatureSwitch("hipSwitch", true))
-        when(mockMandateFetchService.fetchClientMandate(any())(any())).thenReturn(Future.successful(MandateFetched(mandate)))
-        when(mockMandateRepository.updateMandate(any())(any()))
+        when(mockMandateFetchService.fetchClientMandate(any())(using any())).thenReturn(Future.successful(MandateFetched(mandate)))
+        when(mockMandateRepository.updateMandate(any())(using any()))
           .thenReturn(Future.successful(MandateUpdated(updatedMandate1)))
         when(mockEmailNotificationService.sendMail(ArgumentMatchers.eq("client@mail.com"), any(),
-          ArgumentMatchers.eq(Some("client")), any(), any(), any(), any(), any())(any()))
+          ArgumentMatchers.eq(Some("client")), any(), any(), any(), any(), any())(using any()))
           .thenReturn(Future.successful(EmailSent))
 
         val actorRef = system.actorOf(DeActivationTaskExecutorMock.props(
@@ -422,10 +422,10 @@ class DeActivationTaskExecutorSpec extends TestKit(ActorSystem("activation-task"
 
       "signal is Next('finalize-deactivation', args) and userType is Agent, send mail to agent" in {
         FeatureSwitch.enable(FeatureSwitch("hipSwitch", true))
-        when(mockMandateFetchService.fetchClientMandate(any())(any())).thenReturn(Future.successful(MandateFetched(mandate)))
-        when(mockMandateRepository.updateMandate(any())(any())).thenReturn(Future.successful(MandateUpdated(updatedMandate)))
+        when(mockMandateFetchService.fetchClientMandate(any())(using any())).thenReturn(Future.successful(MandateFetched(mandate)))
+        when(mockMandateRepository.updateMandate(any())(using any())).thenReturn(Future.successful(MandateUpdated(updatedMandate)))
         when(mockEmailNotificationService.sendMail(ArgumentMatchers.eq("agent@mail.com"), any(),
-          ArgumentMatchers.eq(Some("agent")), any(), any(), any(), any(), any())(any()))
+          ArgumentMatchers.eq(Some("agent")), any(), any(), any(), any(), any())(using any()))
           .thenReturn(Future.successful(EmailSent))
 
         val actorRef = system.actorOf(DeActivationTaskExecutorMock.props(
@@ -443,10 +443,10 @@ class DeActivationTaskExecutorSpec extends TestKit(ActorSystem("activation-task"
 
       "signal is Next('finalize-deactivation', args) and userType is Agent, sends mail to client" in {
         FeatureSwitch.enable(FeatureSwitch("hipSwitch", true))
-        when(mockMandateFetchService.fetchClientMandate(any())(any())).thenReturn(Future.successful(MandateFetched(mandate)))
-        when(mockMandateRepository.updateMandate(any())(any())).thenReturn(Future.successful(MandateUpdated(updatedMandate1)))
+        when(mockMandateFetchService.fetchClientMandate(any())(using any())).thenReturn(Future.successful(MandateFetched(mandate)))
+        when(mockMandateRepository.updateMandate(any())(using any())).thenReturn(Future.successful(MandateUpdated(updatedMandate1)))
         when(mockEmailNotificationService.sendMail(ArgumentMatchers.eq("client@mail.com"), any(),
-          ArgumentMatchers.eq(Some("client")), any(),any(), any(), any(), any())(any()))
+          ArgumentMatchers.eq(Some("client")), any(),any(), any(), any(), any())(using any()))
           .thenReturn(Future.successful(EmailSent))
 
         val actorRef = system.actorOf(DeActivationTaskExecutorMock.props(
@@ -477,10 +477,10 @@ class DeActivationTaskExecutorSpec extends TestKit(ActorSystem("activation-task"
       }
 
       "signal is Next('finalize-deactivation', args) but no mandate is returned" in {
-        when(mockMandateFetchService.fetchClientMandate(any())(any())).thenReturn(Future.successful(MandateNotFound))
-        when(mockMandateRepository.updateMandate(any())(any())).thenReturn(Future.successful(MandateUpdated(updatedMandate)))
+        when(mockMandateFetchService.fetchClientMandate(any())(using any())).thenReturn(Future.successful(MandateNotFound))
+        when(mockMandateRepository.updateMandate(any())(using any())).thenReturn(Future.successful(MandateUpdated(updatedMandate)))
         when(mockEmailNotificationService.sendMail(ArgumentMatchers.eq(updatedMandate.id),
-          any(), any(),any(), any(), any(), any(), any())(any())).thenReturn(Future.successful(EmailSent))
+          any(), any(),any(), any(), any(), any(), any())(using any())).thenReturn(Future.successful(EmailSent))
 
         val actorRef = system.actorOf(DeActivationTaskExecutorMock.props(
         ))
@@ -491,9 +491,9 @@ class DeActivationTaskExecutorSpec extends TestKit(ActorSystem("activation-task"
 
       "signal is Next('finalize-deactivation', args) but mandate update fails" in {
         FeatureSwitch.enable(FeatureSwitch("hipSwitch", true))
-        when(mockMandateFetchService.fetchClientMandate(any())(any())).thenReturn(Future.successful(MandateFetched(mandate)))
-        when(mockMandateRepository.updateMandate(any())(any())).thenReturn(Future.successful(MandateUpdateError))
-        when(mockEmailNotificationService.sendMail(ArgumentMatchers.eq(updatedMandate.id), any(), any(), any(), any(), any(), any(), any())(any()))
+        when(mockMandateFetchService.fetchClientMandate(any())(using any())).thenReturn(Future.successful(MandateFetched(mandate)))
+        when(mockMandateRepository.updateMandate(any())(using any())).thenReturn(Future.successful(MandateUpdateError))
+        when(mockEmailNotificationService.sendMail(ArgumentMatchers.eq(updatedMandate.id), any(), any(), any(), any(), any(), any(), any())(using any()))
           .thenReturn(Future.successful(EmailSent))
 
         val actorRef = system.actorOf(DeActivationTaskExecutorMock.props(
@@ -508,8 +508,8 @@ class DeActivationTaskExecutorSpec extends TestKit(ActorSystem("activation-task"
 
       "the Signal is START and move to Finish" in {
         FeatureSwitch.enable(FeatureSwitch("hipSwitch", true))
-        when(mockMandateFetchService.fetchClientMandate(any())(any())).thenReturn(Future.successful(MandateFetched(mandate)))
-        when(mockMandateRepository.updateMandate(any())(any())).thenReturn(Future.successful(MandateUpdated(updatedMandate)))
+        when(mockMandateFetchService.fetchClientMandate(any())(using any())).thenReturn(Future.successful(MandateFetched(mandate)))
+        when(mockMandateRepository.updateMandate(any())(using any())).thenReturn(Future.successful(MandateUpdated(updatedMandate)))
 
         val actorRef = system.actorOf(DeActivationTaskExecutorMock.props(
         ))
@@ -593,7 +593,7 @@ class DeActivationTaskExecutorSpec extends TestKit(ActorSystem("activation-task"
     "execute and move to 'finalize-deactivation' step tax enrolments" when {
       "signal is Next('gg-proxy-deactivation', args)" in {
         FeatureSwitch.enable(FeatureSwitch("hipSwitch", true))
-        when(taxEnrolmentMock.deAllocateAgent(any(), any(), any(), any())(any())) thenReturn Future.successful(HttpResponse(NO_CONTENT, ""))
+        when(taxEnrolmentMock.deAllocateAgent(any(), any(), any(), any())(using any())) thenReturn Future.successful(HttpResponse(NO_CONTENT, ""))
 
         val actorRef = system.actorOf(DeActivationTaskExecutorMock.props(
         ))
@@ -613,7 +613,7 @@ class DeActivationTaskExecutorSpec extends TestKit(ActorSystem("activation-task"
 
       "signal is Next('gg-proxy-deactivation', args) not found returned" in {
         FeatureSwitch.enable(FeatureSwitch("hipSwitch", true))
-        when(taxEnrolmentMock.deAllocateAgent(any(), any(), any(), any())(any())) thenReturn Future.successful(HttpResponse(NOT_FOUND, ""))
+        when(taxEnrolmentMock.deAllocateAgent(any(), any(), any(), any())(using any())) thenReturn Future.successful(HttpResponse(NOT_FOUND, ""))
 
         val actorRef = system.actorOf(DeActivationTaskExecutorMock.props())
 
@@ -632,7 +632,7 @@ class DeActivationTaskExecutorSpec extends TestKit(ActorSystem("activation-task"
 
       "signal is Next('gg-proxy-deactivation', args) failure code returned" in {
         FeatureSwitch.enable(FeatureSwitch("hipSwitch", true))
-        when(taxEnrolmentMock.deAllocateAgent(any(), any(), any(), any())(any())) thenReturn Future.successful(HttpResponse(INTERNAL_SERVER_ERROR, ""))
+        when(taxEnrolmentMock.deAllocateAgent(any(), any(), any(), any())(using any())) thenReturn Future.successful(HttpResponse(INTERNAL_SERVER_ERROR, ""))
 
         val actorRef = system.actorOf(DeActivationTaskExecutorMock.props(
         ))

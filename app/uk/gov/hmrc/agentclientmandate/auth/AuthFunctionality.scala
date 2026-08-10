@@ -59,7 +59,7 @@ case class AuthRetrieval(enrolments: Set[Enrolment],
 trait AuthFunctionality extends AuthorisedFunctions {
 
   def authRetrieval(body: AuthRetrieval => Future[Result])
-                   (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Result] = {
+                   (using hc: HeaderCarrier, ec: ExecutionContext): Future[Result] = {
     authorised().retrieve(allEnrolments and agentInformation and credentials) {
       case Enrolments(enrolments) ~ agentInfo ~ creds =>
         body(AuthRetrieval(enrolments, agentInfo, creds))

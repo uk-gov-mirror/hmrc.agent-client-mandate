@@ -55,7 +55,7 @@ trait MandateUpdateService extends Auditable {
   def etmpConnector: EtmpConnector
   def hipConnector: HipConnector
 
-  def approveMandate(approvedMandate: Mandate)(implicit ar: AuthRetrieval): Future[MandateUpdate] = {
+  def approveMandate(approvedMandate: Mandate)(using ar: AuthRetrieval): Future[MandateUpdate] = {
     val service = approvedMandate.subscription.service.id.toLowerCase
     service match {
       case "ated" =>
@@ -95,7 +95,7 @@ trait MandateUpdateService extends Auditable {
     }
   }
 
-  def updateMandate(mandate: Mandate, setStatus: Option[Status] = None)(implicit ar: AuthRetrieval): Future[MandateUpdate] = {
+  def updateMandate(mandate: Mandate, setStatus: Option[Status] = None)(using ar: AuthRetrieval): Future[MandateUpdate] = {
     val updatedMandate = setStatus match {
       case Some(x) => mandate.updateStatus(MandateStatus(x, Instant.now, ar.govGatewayId))
       case None => mandate
@@ -113,7 +113,7 @@ trait MandateUpdateService extends Auditable {
     mandateRepository.updateClientEmail(mandateId, email)
   }
 
-  def updateAgentCredId(oldCredId: String)(implicit ar: AuthRetrieval): Future[MandateUpdate] = {
+  def updateAgentCredId(oldCredId: String)(using ar: AuthRetrieval): Future[MandateUpdate] = {
     mandateRepository.updateAgentCredId(oldCredId, ar.govGatewayId)
   }
 

@@ -68,7 +68,7 @@ class AgentDelegationForAtedControllerSpec extends PlaySpec with MockitoSugar wi
 
     "return OK" when {
       "agent is authorised to act on behalf of ated customers" in {
-        when(mockRelationshipService.isAuthorisedForAted(ArgumentMatchers.eq(atedUtr))(any(), any())).thenReturn(Future.successful(true))
+        when(mockRelationshipService.isAuthorisedForAted(ArgumentMatchers.eq(atedUtr))(using any(), any())).thenReturn(Future.successful(true))
         val result = TestAgentDelegationForAtedController.isAuthorisedForAted(agentCode, atedUtr).apply(FakeRequest())
         status(result) must be(OK)
       }
@@ -76,7 +76,7 @@ class AgentDelegationForAtedControllerSpec extends PlaySpec with MockitoSugar wi
 
     "return UnAuthorised" when {
       "agent is not authorised to act on behalf of ated customers" in {
-        when(mockRelationshipService.isAuthorisedForAted(ArgumentMatchers.eq(atedUtr))(any(), any())).thenReturn(Future.successful(false))
+        when(mockRelationshipService.isAuthorisedForAted(ArgumentMatchers.eq(atedUtr))(using any(), any())).thenReturn(Future.successful(false))
         val result = TestAgentDelegationForAtedController.isAuthorisedForAted(agentCode, atedUtr).apply(FakeRequest())
         status(result) must be(UNAUTHORIZED)
       }
@@ -84,7 +84,7 @@ class AgentDelegationForAtedControllerSpec extends PlaySpec with MockitoSugar wi
 
     "return not found" when {
       "Runtime Exception is thrown" in {
-        when(mockRelationshipService.isAuthorisedForAted(ArgumentMatchers.eq(atedUtr))(any(), any())).thenReturn(Future.failed(new RuntimeException("some error")))
+        when(mockRelationshipService.isAuthorisedForAted(ArgumentMatchers.eq(atedUtr))(using any(), any())).thenReturn(Future.failed(new RuntimeException("some error")))
         val result = TestAgentDelegationForAtedController.isAuthorisedForAted(agentCode, atedUtr).apply(FakeRequest())
         status(result) must be(NOT_FOUND)
       }

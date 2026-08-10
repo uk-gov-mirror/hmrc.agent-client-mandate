@@ -60,27 +60,27 @@ trait MandateRepo {
 }
 
 trait MandateRepository extends PlayMongoRepository[Mandate] with MandateRepo {
-  def insertMandate(mandate: Mandate)(implicit ec: ExecutionContext): Future[MandateCreate]
-  def updateMandate(mandate: Mandate)(implicit ec: ExecutionContext): Future[MandateUpdate]
-  def fetchMandate(mandateId: String)(implicit ec: ExecutionContext): Future[MandateFetchStatus]
-  def fetchMandateByClient(clientId: String, service: String)(implicit ec: ExecutionContext): Future[MandateFetchStatus]
+  def insertMandate(mandate: Mandate)(using ec: ExecutionContext): Future[MandateCreate]
+  def updateMandate(mandate: Mandate)(using ec: ExecutionContext): Future[MandateUpdate]
+  def fetchMandate(mandateId: String)(using ec: ExecutionContext): Future[MandateFetchStatus]
+  def fetchMandateByClient(clientId: String, service: String)(using ec: ExecutionContext): Future[MandateFetchStatus]
   def getAllMandatesByServiceName(arn: String,
                                   serviceName: String,
                                   credId: Option[String],
                                   otherCredId: Option[String],
-                                  displayName: Option[String])(implicit ec: ExecutionContext): Future[Seq[Mandate]]
-  def findMandatesMissingAgentEmail(arn: String, service: String)(implicit ec: ExecutionContext): Future[Seq[String]]
-  def updateAgentEmail(mandateIds: Seq[String], email: String)(implicit ec: ExecutionContext): Future[MandateUpdate]
-  def updateClientEmail(mandateId: String, email: String)(implicit ec: ExecutionContext): Future[MandateUpdate]
-  def updateAgentCredId(oldCredId: String, newCredId: String)(implicit ec: ExecutionContext): Future[MandateUpdate]
-  def findOldMandates(dateFrom: Instant)(implicit ec: ExecutionContext): Future[Seq[Mandate]]
-  def getClientCancelledMandates(dateFrom: Instant, arn: String, serviceName: String)(implicit ec: ExecutionContext): Future[Seq[String]]
-  def removeMandate(mandateId: String)(implicit ec: ExecutionContext): Future[MandateRemove]
+                                  displayName: Option[String])(using ec: ExecutionContext): Future[Seq[Mandate]]
+  def findMandatesMissingAgentEmail(arn: String, service: String)(using ec: ExecutionContext): Future[Seq[String]]
+  def updateAgentEmail(mandateIds: Seq[String], email: String)(using ec: ExecutionContext): Future[MandateUpdate]
+  def updateClientEmail(mandateId: String, email: String)(using ec: ExecutionContext): Future[MandateUpdate]
+  def updateAgentCredId(oldCredId: String, newCredId: String)(using ec: ExecutionContext): Future[MandateUpdate]
+  def findOldMandates(dateFrom: Instant)(using ec: ExecutionContext): Future[Seq[Mandate]]
+  def getClientCancelledMandates(dateFrom: Instant, arn: String, serviceName: String)(using ec: ExecutionContext): Future[Seq[String]]
+  def removeMandate(mandateId: String)(using ec: ExecutionContext): Future[MandateRemove]
   def metrics: ServiceMetrics
 }
 
 @Singleton
-class MandateMongoRepository @Inject() (mongo: MongoComponent, val metrics: ServiceMetrics)(implicit ec: ExecutionContext)
+class MandateMongoRepository @Inject() (mongo: MongoComponent, val metrics: ServiceMetrics)(using ec: ExecutionContext)
   extends PlayMongoRepository[Mandate](
     collectionName = "mandates",
     mongoComponent = mongo,
@@ -104,7 +104,7 @@ class MandateMongoRepository @Inject() (mongo: MongoComponent, val metrics: Serv
   val logger: Logger = Logger(getClass)
   val repository: MandateRepository = this
 
-  def insertMandate(mandate: Mandate)(implicit ec: ExecutionContext): Future[MandateCreate] = {
+  def insertMandate(mandate: Mandate)(using ec: ExecutionContext): Future[MandateCreate] = {
     val timerContext = metrics.startTimer(MetricsEnum.RepositoryInsertMandate)
     Mdc.preservingMdc {
       collection
@@ -124,7 +124,7 @@ class MandateMongoRepository @Inject() (mongo: MongoComponent, val metrics: Serv
     }
   }
 
-  def updateMandate(mandate: Mandate)(implicit ec: ExecutionContext): Future[MandateUpdate] = {
+  def updateMandate(mandate: Mandate)(using ec: ExecutionContext): Future[MandateUpdate] = {
     val timerContext = metrics.startTimer(MetricsEnum.RepositoryUpdateMandate)
     Mdc.preservingMdc {
       collection

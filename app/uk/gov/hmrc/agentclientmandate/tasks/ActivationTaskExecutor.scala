@@ -90,7 +90,7 @@ class ActivationTaskService @Inject()(val etmpConnector: EtmpConnector,
     }
   }
 
-  private def enrolTaxEnrolments(args: Map[String, String])(implicit hc: HeaderCarrier): Try[Signal] = {
+  private def enrolTaxEnrolments(args: Map[String, String])(using hc: HeaderCarrier): Try[Signal] = {
     Try(Await.result(taxEnrolmentConnector.allocateAgent(
       NewEnrolment(args("credId")), args("groupId"), args("clientId"), args("agentCode")), 120 seconds)
     ) match {
@@ -110,7 +110,7 @@ class ActivationTaskService @Inject()(val etmpConnector: EtmpConnector,
     }
   }
 
-  private def finalize(args: Map[String, String])(implicit hc: HeaderCarrier): Try[Signal] = {
+  private def finalize(args: Map[String, String])(using hc: HeaderCarrier): Try[Signal] = {
     val fetchResult = Await.result(fetchService.fetchClientMandate(args("mandateId")), 5 seconds)
     fetchResult match {
       case MandateFetched(mandate) =>

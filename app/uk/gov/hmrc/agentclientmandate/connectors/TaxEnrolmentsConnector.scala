@@ -55,7 +55,7 @@ trait TaxEnrolmentConnector extends Auditable {
   def http: HttpClientV2
   def metrics: ServiceMetrics
 
-  def allocateAgent(input: NewEnrolment, agentGroupId: String, clientAgentRef: String, agentCode: String)(implicit hc: HeaderCarrier): Future[HttpResponse] = {
+  def allocateAgent(input: NewEnrolment, agentGroupId: String, clientAgentRef: String, agentCode: String)(using hc: HeaderCarrier): Future[HttpResponse] = {
     val enrolmentKey = s"${MandateConstants.AtedServiceContractName}~${MandateConstants.AtedIdentifier}~$clientAgentRef"
     val postUrl = s"""$taxEnrolmentsUrl/groups/$agentGroupId/enrolments/$enrolmentKey?legacy-agentCode=$agentCode"""
     val jsonData = Json.toJson(input)
@@ -77,7 +77,7 @@ trait TaxEnrolmentConnector extends Auditable {
     }
   }
 
-  def deAllocateAgent(agentPartyId: String, clientAgentRef: String, agentCode: String, userType: String)(implicit hc: HeaderCarrier): Future[HttpResponse] = {
+  def deAllocateAgent(agentPartyId: String, clientAgentRef: String, agentCode: String, userType: String)(using hc: HeaderCarrier): Future[HttpResponse] = {
     val enrolmentKey = s"${MandateConstants.AtedServiceContractName}~${MandateConstants.AtedIdentifier}~$clientAgentRef"
 
     getGroupsWithEnrolment(agentPartyId).flatMap { agentGroupId =>
@@ -105,7 +105,7 @@ trait TaxEnrolmentConnector extends Auditable {
     }
   }
 
-  def getGroupsWithEnrolment(agentRefNumber: String)(implicit hc: HeaderCarrier): Future[Option[String]] = {
+  def getGroupsWithEnrolment(agentRefNumber: String)(using hc: HeaderCarrier): Future[Option[String]] = {
     val enrolmentKey = s"${MandateConstants.AgentServiceContractName}~${MandateConstants.AgentIdentifier}~$agentRefNumber"
     val getUrl = s"""$enrolmentStoreProxyURL/enrolment-store/enrolments/$enrolmentKey/groups"""
 
@@ -125,7 +125,7 @@ trait TaxEnrolmentConnector extends Auditable {
     }
   }
 
-  def getGroupsWithEnrolmentDelegatedAted(atedRefNumber: String)(implicit hc: HeaderCarrier): Future[Option[String]] = {
+  def getGroupsWithEnrolmentDelegatedAted(atedRefNumber: String)(using hc: HeaderCarrier): Future[Option[String]] = {
     val enrolmentKey = s"${MandateConstants.AtedServiceContractName}~${MandateConstants.AtedIdentifier}~$atedRefNumber"
     val getUrl = s"""$enrolmentStoreProxyURL/enrolment-store/enrolments/$enrolmentKey/groups"""
     val ignoreAssignmentsParam = Map("ignore-assignments" -> "true")
